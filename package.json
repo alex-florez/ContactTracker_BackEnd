@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "nm": "nodemon app.js",
-    "build": "echo \"Ejecutando build\""
+    "nm": "nodemon app.js"
   },
   "repository": {
     "type": "git",
