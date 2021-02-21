@@ -2,9 +2,12 @@
   "name": "contacttracker_backend",
   "version": "1.0.0",
   "description": "BackEnd server for ContactTracker Web App",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "nm": "nodemon app.js",
+    "build": "echo \"Ejecutando build\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,7 @@
   },
   "homepage": "https://github.com/alex-florez/ContactTracker_BackEnd#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
   }
 }
