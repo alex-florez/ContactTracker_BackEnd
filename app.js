@@ -8,6 +8,6 @@ app.get('/', (req, res) => {
     res.send("Hello World!!!!")
 })
 
-app.listen(port, () => {
+app.listen(port, hostname, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
