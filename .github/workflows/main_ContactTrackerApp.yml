@@ -32,5 +32,5 @@ jobs:
       with:
         app-name: 'ContactTrackerApp'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_385f437c4a4645b499d4f7f49407d245 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f4bc20bcdc604d5f813b124ac5df6eaa }}
         package: .
