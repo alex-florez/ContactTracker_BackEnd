@@ -7,7 +7,7 @@ const port = process.env.port || 8080
 const hostname = 'localhost'
 
 app.get('/', (req, res) => {
-    res.send("Hello World!! from Node.js Server")
+    res.send("Hello World!! from Node.js Server 2.0")
 })
 
 app.listen(port, () => {
