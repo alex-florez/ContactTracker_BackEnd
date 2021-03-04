@@ -10,6 +10,15 @@ app.get('/', (req, res) => {
     res.send("Hello World!! from Node.js Server 2.1")
 })
 
+app.get('/hola', (req, res) => {
+    res.send("Hola mundo!")
+})
+
+app.get('/res/:id', (req, res) => {
+    res.send(`Accediendo al recurso ${req.params.id}`)
+})
+
+
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
