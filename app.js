@@ -19,6 +19,14 @@ app.get('/res/:id', (req, res) => {
 })
 
 
+app.get('/getPositivo', (req,res) => {
+    console.log("get prueba invocado")
+    res.json({
+        positiveID: '199',
+        prueba: "esto es una prueba"
+    })
+})
+
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
