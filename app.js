@@ -21,9 +21,14 @@ app.get('/res/:id', (req, res) => {
 
 app.get('/getPositivo', (req,res) => {
     console.log("get prueba invocado")
-    res.json({
-        positiveID: '199',
-        prueba: "esto es una prueba"
+    // res.json({
+    //     positiveID: '199',
+    //     prueba: "esto es una prueba"
+    // })
+    res.status(404).send({
+        code: 405,
+        message: "No existe el recurso.",
+        timestamp: Date.now()
     })
 })
 
