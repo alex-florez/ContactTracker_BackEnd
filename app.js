@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+// Body Parser para el JSON
+app.use(express.json())
+
 const port = process.env.port || 8080
 // const hostname = process.env.WEBSITE_HOSTNAME || 'localhost'
 
@@ -30,6 +33,18 @@ app.get('/getPositivo', (req,res) => {
         message: "No existe el recurso.",
         timestamp: Date.now()
     })
+})
+
+app.post('/notifyPositive', (req, res) => {
+    console.log(req.body)
+    res.json({
+        uploadedLocations: req.body.length
+    })
+    // res.status(403).send({
+    //     code: 403,
+    //     message: "Error",
+    //     timestamp: Date.now()
+    // })
 })
 
 app.listen(port, () => {
