@@ -4,6 +4,15 @@ const app = express()
 // Body Parser para el JSON
 app.use(express.json())
 
+// Configuración de FIREBASE
+const fbAdmin = require('firebase-admin')
+const fbServiceAccount = require('./db/contacttracker-admin-sdk.json')
+fbAdmin.initializeApp({
+    credential: fbAdmin.credential.cert(fbServiceAccount) 
+})
+
+const db = fbAdmin.firestore()
+
 const port = process.env.port || 8080
 // const hostname = process.env.WEBSITE_HOSTNAME || 'localhost'
 
@@ -37,6 +46,7 @@ app.get('/getPositivo', (req,res) => {
 
 app.post('/notifyPositive', (req, res) => {
     console.log(req.body)
+    pruebaAdd()
     res.json({
         uploadedLocations: req.body.length
     })
@@ -50,3 +60,15 @@ app.post('/notifyPositive', (req, res) => {
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
+
+
+function pruebaAdd() {
+    db.collection("pruebas").add({
+        name: "Alejandro",
+        age: "21"
+    }).then((docRef) => {
+        console.log(`Added: ${docRef.id}`)
+    }).catch((error) => {
+        console.log(`Error adding: ${error}`)
+    })
+}
