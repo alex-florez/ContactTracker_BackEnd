@@ -11,10 +11,17 @@ app.use(express.json())
 //     credential: fbAdmin.credential.cert(fbServiceAccount) 
 // })
 
+// Base de datos firebase
 const db = require('./db/firebase_config.js').config_firebase()
 
-const port = process.env.port || 8080
+// Repositorios
+const locationRepository = require('./repository/locationRepository.js')
+locationRepository.init(db)
 
+// Routers
+const positiveApi = require('./routes/apipositive.js')(app, locationRepository)
+
+const port = process.env.port || 8080
 const hostname = 'localhost'
 
 app.get('/', (req, res) => {
@@ -43,31 +50,7 @@ app.get('/getPositivo', (req,res) => {
     })
 })
 
-app.post('/notifyPositive', (req, res) => {
-    console.log(req.body)
-    pruebaAdd()
-    res.json({
-        uploadedLocations: req.body.length
-    })
-    // res.status(403).send({
-    //     code: 403,
-    //     message: "Error",
-    //     timestamp: Date.now()
-    // })
-})
 
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
-
-
-function pruebaAdd() {
-    db.collection("pruebas").add({
-        name: "Alejandro",
-        age: "21"
-    }).then((docRef) => {
-        console.log(`Added: ${docRef.id}`)
-    }).catch((error) => {
-        console.log(`Error adding: ${error}`)
-    })
-}
