@@ -5,16 +5,15 @@ const app = express()
 app.use(express.json())
 
 // Configuración de FIREBASE
-const fbAdmin = require('firebase-admin')
-const fbServiceAccount = require('./db/contacttracker-admin-sdk.json')
-fbAdmin.initializeApp({
-    credential: fbAdmin.credential.cert(fbServiceAccount) 
-})
+// const fbAdmin = require('firebase-admin')
+// const fbServiceAccount = require('./db/contacttracker-admin-sdk.json')
+// fbAdmin.initializeApp({
+//     credential: fbAdmin.credential.cert(fbServiceAccount) 
+// })
 
-const db = fbAdmin.firestore()
+const db = require('./db/firebase_config.js').config_firebase()
 
 const port = process.env.port || 8080
-// const hostname = process.env.WEBSITE_HOSTNAME || 'localhost'
 
 const hostname = 'localhost'
 
