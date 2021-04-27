@@ -18,7 +18,7 @@ const db = require('./db/firebase_config.js').config_firebase()
 const locationRepository = require('./repository/locationRepository.js')
 locationRepository.init(db)
 
-// Routers
+// Routers de la API
 const positiveApi = require('./routes/apipositive.js')(app, locationRepository)
 
 const port = process.env.port || 8080

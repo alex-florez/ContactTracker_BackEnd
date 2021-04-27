@@ -14,7 +14,7 @@ module.exports = function(app, locationRepository) {
         locationRepository.addLocations(req.body, (docRef) => {
             console.log(`Nuevo positivo registrado ${docRef.id}`)
             res.json({
-                uploadedLocations: req.body.length
+                uploadedLocations: req.body.locations.length
             })
         }, (error) => {
             console.log(`Error al insertar positivo: ${error}`)

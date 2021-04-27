@@ -9,15 +9,13 @@ module.exports = {
      * Inserta todas las localizaciones pasadas como parámetro
      * en la base de datos. Si hay éxito ejecuta el callback pasado
      * como parámetro.
-     * @param {lista de localiaciones} locations 
+     * @param {lista de localizaciones} locations 
      * @param {callback de éxito} success
      * @param {callback de fallo} fail
      */
     addLocations: function(locations, success, fail) {
-       this.db.collection(this.COLLECTION_POSITIVES).add({
-           timestamp: Date.now(),
-           positiveLocations: locations
-       }).then(docRef => {
+        locations.timestamp = Date.now()
+       this.db.collection(this.COLLECTION_POSITIVES).add(locations).then(docRef => {
            success(docRef)
        }).catch(error => {
            fail(error)
