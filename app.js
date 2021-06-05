@@ -1,8 +1,12 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
 
 // Body Parser para el JSON
 app.use(express.json())
+
+// CORS
+app.use(cors())
 
 // Configuración de FIREBASE
 // const fbAdmin = require('firebase-admin')
@@ -50,6 +54,13 @@ app.get('/getPositivo', (req,res) => {
     })
 })
 
+
+app.get('/pruebaVue', (req, res) => {
+    res.json({
+        valor: 12,
+        msg: "Enviado para Vue"
+    })
+})
 
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
