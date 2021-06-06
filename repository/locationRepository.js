@@ -9,9 +9,9 @@ module.exports = {
      * Inserta todas las localizaciones pasadas como parámetro
      * en la base de datos. Si hay éxito ejecuta el callback pasado
      * como parámetro.
-     * @param {lista de localizaciones} locations 
-     * @param {callback de éxito} success
-     * @param {callback de fallo} fail
+     * @param {list} locations Lista de objetos de localización. 
+     * @param {callback} success Callback de éxito.
+     * @param {callback} fail Callback de fallo.
      */
     addLocations: function(locations, success, fail) {
         locations.timestamp = Date.now()
@@ -21,5 +21,4 @@ module.exports = {
            fail(error)
        })
     }
-
 }
