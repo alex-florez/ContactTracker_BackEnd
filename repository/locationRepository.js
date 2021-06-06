@@ -14,11 +14,11 @@ module.exports = {
      * @param {callback} fail Callback de fallo.
      */
     addLocations: function(locations, success, fail) {
-        locations.timestamp = Date.now()
-       this.db.collection(this.COLLECTION_POSITIVES).add(locations).then(docRef => {
+        locations.timestamp = new Date(Date.now())
+        this.db.collection(this.COLLECTION_POSITIVES).add(locations).then(docRef => {
            success(docRef)
-       }).catch(error => {
+        }).catch(error => {
            fail(error)
-       })
+        })
     }
 }
