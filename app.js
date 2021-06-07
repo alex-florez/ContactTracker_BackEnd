@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 var cors = require('cors')
+var dateFormat = require('dateformat')
 
 // Body Parser para el JSON
 app.use(express.json())
@@ -11,9 +12,12 @@ app.use(cors())
 // Base de datos firebase
 const db = require('./db/firebase_config.js').config_firebase()
 
+// Librería Date Format
+app.set('dateformatter', dateFormat)
+
 // Repositorios
 const locationRepository = require('./repository/locationRepository.js')
-locationRepository.init(db)
+locationRepository.init(app, db)
 const configRepository = require('./repository/configRepository.js')
 configRepository.init(db)
 
