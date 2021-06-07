@@ -1,9 +1,9 @@
 /**
  * API para gestionar las operaciones relacionadas con los positivos.
  * @param {aplicación express} app 
- * @param {repositorio de localizaciones} locationRepository 
+ * @param {repositorio de positivos} positiveRepository 
  */
-module.exports = function(app, locationRepository) {
+module.exports = function(app, positiveRepository) {
 
     /**
      * POST
@@ -11,7 +11,7 @@ module.exports = function(app, locationRepository) {
      * recibidas en el body en la base de datos firebase.
      */
     app.post('/notifyPositive', (req, res) => {
-        locationRepository.addLocations(req.body, (docRef) => {
+        positiveRepository.addPositive(req.body, (docRef) => {
             console.log(`Nuevo positivo registrado ${docRef.id}`)
             res.json({
                 uploadedLocations: req.body.locations.length
@@ -41,12 +41,12 @@ module.exports = function(app, locationRepository) {
             queryDates.push(app.get('dateformatter')(diff, "yyyy-mm-dd"))
         }
         /* Query para recuperar los positivos que tengan localizaciones en esas fechas.*/
-        locationRepository.getPositivesWithinDates(queryDates,
-            (positives) => {
+        positiveRepository.getPositivesWithinDates(queryDates,
+            (positives) => { // Éxito
                 res.json(positives)
-            }, (error) => {
-                console.log(error)
-                res.json([])
+            }, (error) => { // Error
+                console.log(`Error al recuperar los Positivos: ${error}`)
+                res.json([]) // Enviar un JSON vacío
             })
     })
 }

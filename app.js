@@ -9,20 +9,20 @@ app.use(express.json())
 // CORS
 app.use(cors())
 
-// Base de datos firebase
+/* Base de datos firebase */
 const db = require('./db/firebase_config.js').config_firebase()
 
-// Librería Date Format
-app.set('dateformatter', dateFormat)
+/* Variables Globales */
+app.set('dateformatter', dateFormat) // Librería DateFormat
 
-// Repositorios
-const locationRepository = require('./repository/locationRepository.js')
-locationRepository.init(app, db)
+/* Repositorios */
+const positiveRepository = require('./repository/positiveRepository.js')
+positiveRepository.init(app, db)
 const configRepository = require('./repository/configRepository.js')
 configRepository.init(db)
 
-// Routers de la API
-const positiveApi = require('./routes/apipositive.js')(app, locationRepository)
+//* Routers de la API */
+const positiveApi = require('./routes/apipositive.js')(app, positiveRepository)
 const configApi = require('./routes/apiconfig.js')(app, configRepository)
 
 const port = process.env.port || 8080

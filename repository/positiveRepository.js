@@ -11,12 +11,12 @@ module.exports = {
      * Inserta todas las localizaciones pasadas como parámetro
      * en la base de datos. Si hay éxito ejecuta el callback pasado
      * como parámetro.
-     * @param {list} locations Lista de objetos de localización. 
+     * @param {object} positive Objeto Positivo con las localizaciones. 
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    addLocations: function(locations, success, fail) {
-        this.db.collection(this.COLLECTION_POSITIVES).add(locations).then(docRef => {
+    addPositive: function(positive, success, fail) {
+        this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
            fail(error)
@@ -36,7 +36,7 @@ module.exports = {
             .where('locationDates', 'array-contains-any', dates)
             .get()
             .then(result => {
-                let positives = []
+                let positives = [] // Array de positivos
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.id = doc.id // Establecer el id del documento
