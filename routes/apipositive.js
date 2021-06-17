@@ -11,6 +11,7 @@ module.exports = function(app, positiveRepository) {
      * recibidas en el body en la base de datos firebase.
      */
     app.post('/notifyPositive', (req, res) => {
+        console.log(req.body)
         positiveRepository.addPositive(req.body, (docRef) => {
             console.log(`Nuevo positivo registrado ${docRef.id}`)
             res.json({
