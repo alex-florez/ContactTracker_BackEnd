@@ -6,15 +6,15 @@ module.exports = {
     },
 
     /**
-     * Actualiza la configuración del RASTREO.
-     * @param {object} trackerConfig JSON con los campos de la configuración a actualizar.
+     * Actualiza la configuración de la Notificación de positivos.
+     * @param {object} notifyConfig JSON con los campos de la configuración a actualizar.
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    updateTrackerConfig: function(trackerConfig, success, fail) {
+    updateNotifyConfig: function(notifyConfig, success, fail) {
         this.db.collection(this.COLLECTION_CONFIG)
-            .doc('tracker-config')
-            .set(trackerConfig, {merge: true}) // Actualizar campos + merge
+            .doc('notify-config')
+            .set(notifyConfig, {merge: true}) // Actualizar campos + merge
             .then(docRef => {success(docRef)})
             .catch(error => {fail(error)})
     },

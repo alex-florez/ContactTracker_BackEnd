@@ -28,19 +28,6 @@ const configApi = require('./routes/apiconfig.js')(app, configRepository)
 const port = process.env.port || 8080
 const hostname = 'localhost'
 
-// app.get('/getPositivo', (req,res) => {
-//     console.log("get prueba invocado")
-//     // res.json({
-//     //     positiveID: '199',
-//     //     prueba: "esto es una prueba"
-//     // })
-//     res.status(404).send({
-//         code: 405,
-//         message: "No existe el recurso.",
-//         timestamp: Date.now()
-//     })
-// })
-
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port}`)
 })
