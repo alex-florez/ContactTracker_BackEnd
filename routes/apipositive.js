@@ -8,13 +8,16 @@ module.exports = function(app, positiveRepository) {
     /**
      * POST
      * Registra un nuevo positivo en el sistema. Almacena las coordenadas
-     * recibidas en el body en la base de datos firebase.
+     * recibidas en el body en la base de datos firebase. Devuelve como respuesta
+     * el n.º de localizaciones registradas y el ID único del positivo.
      */
     app.post('/notifyPositive', (req, res) => {
         positiveRepository.addPositive(req.body, (docRef) => {
             console.log(`Nuevo positivo registrado ${docRef.id}`)
+            // Respuesta
             res.json({
-                uploadedLocations: req.body.locations.length
+                positiveID: docRef.id, // ID del positivo
+                uploadedLocations: req.body.locations.length // N.º de localizaciones registradas.
             })
         }, (error) => {
             console.log(`Error al insertar positivo: ${error}`)
