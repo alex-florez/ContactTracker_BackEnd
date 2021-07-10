@@ -16,6 +16,12 @@ module.exports = {
      * @param {callback} fail Callback de fallo.
      */
     addPositive: function(positive, success, fail) {
+        // Construir array de fechas únicas
+        let locationDates = positive.locations.map(
+            location => this.app.get("dateformatter")(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
+        ).filter((date, index, array) => array.indexOf(date) === index)
+        positive.locationDates = locationDates
+        
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
