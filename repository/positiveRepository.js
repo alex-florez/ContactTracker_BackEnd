@@ -21,7 +21,7 @@ module.exports = {
             location => this.app.get("dateformatter")(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
-        
+
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
@@ -45,7 +45,7 @@ module.exports = {
                 let positives = [] // Array de positivos
                 result.forEach(doc => {
                     let positive = doc.data()
-                    positive.positiveID = doc.id // Establecer el id del documento
+                    positive.positiveCode = doc.id // Establecer el id del documento
                     positives.push(positive)
                 })
                 success(positives)

@@ -16,7 +16,7 @@ module.exports = function(app, positiveRepository) {
             console.log(`Nuevo positivo registrado ${docRef.id}`)
             // Respuesta
             res.json({
-                positiveID: docRef.id, // ID del positivo
+                positiveCode: docRef.id, // ID del positivo
                 uploadedLocations: req.body.locations.length // N.º de localizaciones registradas.
             })
         }, (error) => {
