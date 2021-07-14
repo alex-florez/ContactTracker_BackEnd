@@ -1,24 +1,28 @@
-module.exports = {
-    db: null, // Instancia de Firestore
-    app: null, // Referencia a la App
-    COLLECTION_POSITIVES: 'positives', // Nombre de las colecciones
-    init: function(app, firestore) { // Constructor
-        this.app = app
-        this.db = firestore
-    },
+const dateFormat = require('dateformat')
+
+/**
+ * Repositorio para gestionar los positivos notificados en el sistema.
+ */
+class PositiveRepository {
+
+    constructor(db){
+        this.db = db // Referencia a Firestore
+        this.COLLECTION_POSITIVES = "positives" // Nombre de la colección
+    }
+
 
     /**
-     * Inserta todas las localizaciones pasadas como parámetro
-     * en la base de datos. Si hay éxito ejecuta el callback pasado
+     * Inserta el positivo en la base de datos. Inserta todas las localizaciones
+     * almacenadas en el positivo en la base de datos. Si hay éxito ejecuta el callback pasado
      * como parámetro.
      * @param {object} positive Objeto Positivo con las localizaciones. 
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    addPositive: function(positive, success, fail) {
+     addPositive(positive, success, fail) {
         // Construir array de fechas únicas
         let locationDates = positive.locations.map(
-            location => this.app.get("dateformatter")(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
+            location => dateFormat(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
 
@@ -27,7 +31,7 @@ module.exports = {
         }).catch(error => {
            fail(error)
         })
-    },
+    }
 
     /**
      * Devuelve los positivos que tienen localizaciones registradas
@@ -37,7 +41,7 @@ module.exports = {
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    getPositivesWithinDates: function(dates, success, fail) {
+    getPositivesWithinDates(dates, success, fail) {
         this.db.collection(this.COLLECTION_POSITIVES)
             .where('locationDates', 'array-contains-any', dates)
             .get()
@@ -53,3 +57,5 @@ module.exports = {
             .catch(fail)
     }
 }
+
+module.exports = PositiveRepository

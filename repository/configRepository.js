@@ -1,9 +1,12 @@
-module.exports = {
-    db: null,
-    COLLECTION_CONFIG: 'configuration',
-    init: function(firestore) {
-        this.db = firestore
-    },
+/**
+ * Repositorio para gestionar los valores de configuración del sistema.
+ */
+class ConfigRepository {
+
+    constructor(db) {
+        this.db = db // Referencia a Firestore
+        this.COLLECTION_CONFIG = 'configuration'  // Nombre de la colección
+    }
 
     /**
      * Actualiza la configuración de la Notificación de positivos.
@@ -11,27 +14,27 @@ module.exports = {
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    updateNotifyConfig: function(notifyConfig, success, fail) {
+     updateNotifyConfig(notifyConfig, success, fail) {
         this.db.collection(this.COLLECTION_CONFIG)
             .doc('notify-config')
             .set(notifyConfig, {merge: true}) // Actualizar campos + merge
             .then(docRef => {success(docRef)})
             .catch(error => {fail(error)})
-    },
+    }
 
     /**
-     * 
+     * Actualiza la configuración de la comprobación de contactos de riesgo.
      * @param {object} riskContactConfig JSON con los campos de la configuración a actualizar. 
-     * @param {callback} success 
-     * @param {callback} fail 
+     * @param {callback} success Callback de éxito.
+     * @param {callback} fail Callback de fallo.
      */
-    updateRiskContactConfig: function(riskContactConfig, success, fail){
+    updateRiskContactConfig(riskContactConfig, success, fail) {
         this.db.collection(this.COLLECTION_CONFIG)
             .doc('risk-contact-config')
             .set(riskContactConfig, {merge: true}) // Actualizar campos + merge
             .then(docRef => {success(docRef)})
             .catch(error => fail(error))
-    },
+    }
 
     /**
      * Devuelve la configuración correspondiente al fichero de configuración
@@ -40,7 +43,7 @@ module.exports = {
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    retrieveConfig: function(configFileName, success, fail) {
+    retrieveConfig(configFileName, success, fail) {
         this.db.collection(this.COLLECTION_CONFIG)
             .doc(configFileName)
             .get()
@@ -53,5 +56,6 @@ module.exports = {
             })
             .catch(error => {fail(error)})
     }
-
 }
+
+module.exports = ConfigRepository

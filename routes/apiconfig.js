@@ -1,65 +1,34 @@
 /**
- * API para gestionar la configuración del rastreo y 
- * de las comprobaciones de contactos de riesgo.
- * @param {aplicacion express} app 
- * @param {repositorio de configuración} configRepository 
+ * Router para la API de gestión de la configuración del rastreo, la notificación
+ * de positivos y la comprobación de contactos de riesgo.
  */
-module.exports = function(app, configRepository) {
+const configRouter = require('express').Router()
+const di = require('../di/AppModule.js') // Inyección de Dependencias (DI)
 
-    /**
-     * POST
-     * Actualiza la configuración de la notificación de positivos con 
-     * los nuevos valores pasados en el BODY de la petición.
-     */
-    app.post('/updateNotifyConfig', (req, res) => {
-        configRepository.updateNotifyConfig(req.body,
-            (docRef) => {
-                res.json({
-                    updated: true,
-                    msg: 'Configuración actualizada correctamente.'
-                })
-            }, (error) => {
-                console.log(`Error al actualizar la configuración de la notificación de positivos: ${error}`)
-                res.json({
-                    updated: false,
-                    msg: 'Ha habido un error al actualizar la configuracion de la notificación de positivos.'
-                })
-            })
-    })
+/* Controlador */
+const configController = di.configController()
 
+/**
+ * GET
+ * Devuelve los parámetros de configuración del fichero de configuración
+ * correspondiente al nombre pasado como parámetro de la URL.
+ */
+ configRouter.get('/:fileName', configController.getConfig.bind(configController))
 
-    /**
-     * POST
-     * Actualiza la configuración de la comprobación de contactos de 
-     * riesgo con los nuevos valores pasados en el BODY de la petición.
-     */
-    app.post('/updateRiskContactConfig', (req, res) => {
-        configRepository.updateRiskContactConfig(req.body,
-            (docRef) => {
-                res.json({
-                    updated: true,
-                    msg: 'Configuración actualizada correctamente.'
-                })
-            }, (error) => {
-                console.log(`Error al actualizar la configuración de la comprobación: ${error}`)
-                res.json({
-                    updated: false,
-                    msg: 'Ha habido un error al actualizar la configuración de la comprobación.'
-                })
-            })
-    })
+/**
+ * POST
+ * Actualiza la configuración de la notificación de positivos con 
+ * los nuevos valores pasados en el BODY de la petición.
+ */
+configRouter.post('/updateNotifyConfig', configController.updateNotifyConfig.bind(configController))
 
-    /**
-     * GET
-     * Devuelve los parámetros de configuración del fichero de configuración
-     * correspondiente al nombre pasado como parámetro de la URL.
-     */
-    app.get('/config/:fileName', (req, res) => {
-        let configFile = req.params.fileName
-        configRepository.retrieveConfig(configFile, (configData) => {
-            res.json(configData)
-        }, (error) => {
-            res.json({})
-        })
-    })
+/**
+ * POST
+ * Actualiza la configuración de la comprobación de contactos de 
+ * riesgo con los nuevos valores pasados en el BODY de la petición.
+ */
+configRouter.post('/updateRiskContactConfig', configController.updateRiskContactConfig.bind(configController))
+
+module.exports = {
+    configRouter
 }

@@ -1,55 +1,29 @@
 /**
- * API para gestionar las operaciones relacionadas con los positivos.
- * @param {aplicación express} app 
- * @param {repositorio de positivos} positiveRepository 
+ * Router para la API de gestión de positivos.
  */
-module.exports = function(app, positiveRepository) {
+const positiveRouter = require('express').Router()
+const di = require('../di/AppModule.js') // Inyección de Dependencias (DI)
 
-    /**
-     * POST
-     * Registra un nuevo positivo en el sistema. Almacena las coordenadas
-     * recibidas en el body en la base de datos firebase. Devuelve como respuesta
-     * el n.º de localizaciones registradas y el ID único del positivo.
-     */
-    app.post('/notifyPositive', (req, res) => {
-        positiveRepository.addPositive(req.body, (docRef) => {
-            console.log(`Nuevo positivo registrado ${docRef.id}`)
-            // Respuesta
-            res.json({
-                positiveCode: docRef.id, // ID del positivo
-                uploadedLocations: req.body.locations.length // N.º de localizaciones registradas.
-            })
-        }, (error) => {
-            console.log(`Error al insertar positivo: ${error}`)
-            res.json({
-                uploadedLocations: 0
-            })
-        })
-    })
+/* Controlador */ 
+const positiveController = di.positiveController()
+
+/**
+ * POST
+ * Registra un nuevo positivo en el sistema. Almacena las coordenadas
+ * recibidas en el body en la base de datos firebase. Devuelve como respuesta
+ * el n.º de localizaciones registradas y el ID único del positivo.
+ */
+positiveRouter.post('/notifyPositive', positiveController.notifyPositive.bind(positiveController))
 
 
-    /**
-     * GET
-     * Devuelve una lista de positivos que tengan localizaciones registradas
-     * en los últimos días indicados con el número de días pasado como 
-     * parámetro de Ruta.
-     */
-    app.get('/getPositives/:lastDays', (req,res) => {
-        let lastDays = parseInt(req.params.lastDays)
-        /* Construir el array de fechas */
-        let queryDates = []
-        let now = new Date() // Fecha actual
-        for(let i = 0; i <= lastDays; i++){
-            let diff = new Date(new Date().setDate(now.getDate() - i))
-            queryDates.push(app.get('dateformatter')(diff, "yyyy-mm-dd"))
-        }
-        /* Query para recuperar los positivos que tengan localizaciones en esas fechas.*/
-        positiveRepository.getPositivesWithinDates(queryDates,
-            (positives) => { // Éxito
-                res.json(positives)
-            }, (error) => { // Error
-                console.log(`Error al recuperar los Positivos: ${error}`)
-                res.json([]) // Enviar un JSON vacío
-            })
-    })
+/**
+ * GET
+ * Devuelve una lista de positivos que tengan localizaciones registradas
+ * en los últimos días indicados con el número de días pasado como 
+ * parámetro de Ruta.
+ */
+positiveRouter.get('/getPositives/:lastDays', positiveController.getPositives.bind(positiveController))
+
+module.exports = {
+    positiveRouter
 }
