@@ -15,18 +15,39 @@ class StatisticsRepository {
      * Registra una nueva instalación de la App móvil, incrementando
      * en uno el campo de instalaciones.
      * 
+     * @param {long} timestamp Fecha y hora en milisegundos en la que se registró la instalación.
      * @param {callback} success Callbnack de éxito.
      * @param {callback} fail Callback de fallo. 
      */
-    registerNewInstall(success, fail) {
-        const increment = firebase.firestore.FieldValue.increment(1)
+    registerNewInstall(timestamp, success, fail) {
+        const array = firebase.firestore.FieldValue.arrayUnion(timestamp)
         this.db.collection(this.COLLECTION_STATISTICS)
             .doc('installations')
             .set({
-                numberOfInstallations: increment
+                installations: array
             }, {merge: true})
             .then(docRef => success(docRef))
             .catch(error => fail(error))
+    }
+
+
+    /**
+     * Registra en la base de datos el resultado de la comprobación de riesgo
+     * pasado como parámetro.
+     * 
+     * @param {JSON} result JSON con los datos del resultado. 
+     * @param {callback} success Callback de éxito.
+     * @param {callback} fail Callback de fallo.
+     */
+    registerRiskContactResult(result, success, fail) {
+        const array = firebase.firestore.FieldValue.arrayUnion(result)
+        this.db.collection(this.COLLECTION_STATISTICS)
+        .doc('check-results')
+        .set({
+            results: array
+        }, {merge: true})
+        .then(docRef => success(docRef))
+        .catch(error => fail(error))
     }
 }
 

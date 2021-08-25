@@ -9,10 +9,10 @@ class StatisticsController {
 
     /**
      * POST
-     * Incrementa en uno el n.º de instalaciones de la aplicación móvil.
+     * Registra la nueva instalación de la app en la base de datos.
      */
     newInstall(req, res) {
-        this.repository.registerNewInstall(
+        this.repository.registerNewInstall(req.body.timestamp,
             (docRef) => {
                 console.log("Nueva instalación registrada.")
                 res.json({
@@ -22,13 +22,34 @@ class StatisticsController {
             },
             (error) => {
                 console.log("Error al registrar una instalación.")
-                console.log(error)
                 res.json({
                     registered: false,
                     msg: "Error al registrar la instalación."
                 })
             }
         )
+    }
+
+
+    /**
+     * POST
+     * Registra el nuevo resultado de la comproabción en la base de datos.
+     */
+    newCheckResult(req, res) {
+        this.repository.registerRiskContactResult(req.body,
+            (docRef) => {
+                console.log("Resultado de la comprobación registrado.")
+                res.json({
+                    registered: true,
+                    msg: "Resultado de la comprobación registrado."
+                })
+            }, (error) => {
+                console.log("Error al registrar el resultado de la comprobación.")
+                res.json({
+                    registered: false,
+                    msg: "Error al registrar el resultado de la comprobación."
+                })
+            })
     }
 }
 

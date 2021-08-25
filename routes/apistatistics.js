@@ -15,6 +15,13 @@ const statisticsController = di.statisticsController()
  */
 statisticsRouter.post('/registerInstall', statisticsController.newInstall.bind(statisticsController))
 
+/**
+ * POST
+ * Registra un nuevo resultado de una comprobación realizada por un usuario. Se almacenan
+ * en la nube solo los datos principales de la comprobación.
+ */
+statisticsRouter.post('/registerCheckResult', statisticsController.newCheckResult.bind(statisticsController))
+
 module.exports = {
     statisticsRouter
 } 
