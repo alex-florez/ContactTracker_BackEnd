@@ -51,6 +51,51 @@ class StatisticsController {
                 })
             })
     }
+
+    /**
+     * GET
+     * Devuelve en la respuesta un objeto JSON con los datos estadísticos 
+     * relacionados con la notificación de positivos.
+     */
+    positiveStatistics(req, res) {
+        this.repository.getPositivesStatistics(data => {
+            res.json(data)
+        }, error => {
+            console.log("Error al calcular las estadísticas de positivos.")
+            res.json({})
+        })
+    }
+
+    /**
+     * GET
+     * Devuelve un objeto JSON con los datos estadísticos relacionados
+     * con la comprobación de contactos de riesgo.
+     */
+    checkStatistics(req, res) {
+        this.repository.getChecksStatistics(data => {
+            res.json(data)
+        }, error => {
+            console.log("Error al calcular las estadísticas de comprobaciones.")
+            res.json({})
+        })
+    }
+
+    /**
+     * GET 
+     * Devuelve el número de instalaciones de la aplicación móvil.
+     */
+    installationStatistics(req, res) {
+        this.repository.getInstalls(numberOfInstalls => {
+            res.json({
+                installCount: numberOfInstalls
+            })
+        }, error => {
+            console.log("Error al recuperar el número de instalaciones.")
+            res.json({
+                installCount: 0
+            })
+        })
+    }
 }
 
 module.exports = StatisticsController
