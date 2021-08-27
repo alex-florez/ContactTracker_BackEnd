@@ -58,7 +58,7 @@ class StatisticsController {
      * relacionados con la notificación de positivos.
      */
     positiveStatistics(req, res) {
-        this.repository.getPositivesStatistics(data => {
+        this.repository.getPositivesStatistics(req.params.lastDays, data => {
             res.json(data)
         }, error => {
             console.log("Error al calcular las estadísticas de positivos.")
@@ -72,10 +72,10 @@ class StatisticsController {
      * con la comprobación de contactos de riesgo.
      */
     checkStatistics(req, res) {
-        this.repository.getChecksStatistics(data => {
+        this.repository.getChecksStatistics(req.params.lastDays, data => {
             res.json(data)
         }, error => {
-            console.log("Error al calcular las estadísticas de comprobaciones.")
+            console.log(`Error al calcular las estadísticas de comprobaciones: ${error}`)
             res.json({})
         })
     }
@@ -85,7 +85,7 @@ class StatisticsController {
      * Devuelve el número de instalaciones de la aplicación móvil.
      */
     installationStatistics(req, res) {
-        this.repository.getInstalls(numberOfInstalls => {
+        this.repository.getInstalls(req.params.lastDays, numberOfInstalls => {
             res.json({
                 installCount: numberOfInstalls
             })

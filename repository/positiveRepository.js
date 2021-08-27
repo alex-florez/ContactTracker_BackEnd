@@ -1,4 +1,5 @@
 const dateFormat = require('dateformat')
+const firebase = require('firebase-admin')
 
 /**
  * Repositorio para gestionar los positivos notificados en el sistema.
@@ -25,7 +26,10 @@ class PositiveRepository {
             location => dateFormat(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
-
+        // Convertir fecha a timestamp
+        let millis = Date.parse(positive.timestamp)
+        let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
+        positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
@@ -50,6 +54,7 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // Establecer el id del documento
+                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp a fecha
                     positives.push(positive)
                 })
                 success(positives)
