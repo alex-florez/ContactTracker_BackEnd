@@ -13,6 +13,30 @@ class PositiveRepository {
 
 
     /**
+     * Devuelve en el callback de éxito un listado con todos los positivos
+     * notificados, ordenados por timestamp de notificación descendente.
+     * 
+     * @param {callback} success Callback de éxito.
+     * @param {callback} fail Callback de fallo. 
+     */
+    getAllPositives(success, fail) {
+        this.db.collection(this.COLLECTION_POSITIVES)
+            .orderBy('timestamp', 'desc')
+            .get()
+            .then(result => {
+                let positives = []
+                result.forEach(doc => {
+                    let positive = doc.data()
+                    positive.positiveCode = doc.id // ID del documento como código del positivo.
+                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp de firebase a Date.
+                    positives.push(positive)
+                })
+                success(positives)
+            })
+            .catch(error => fail(error))
+    }
+
+    /**
      * Inserta el positivo en la base de datos. Inserta todas las localizaciones
      * almacenadas en el positivo en la base de datos. Si hay éxito ejecuta el callback pasado
      * como parámetro.

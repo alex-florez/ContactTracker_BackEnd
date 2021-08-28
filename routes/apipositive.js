@@ -24,6 +24,13 @@ positiveRouter.post('/notifyPositive', positiveController.notifyPositive.bind(po
  */
 positiveRouter.get('/getPositives/:lastDays', positiveController.getPositives.bind(positiveController))
 
+
+/**
+ * GET
+ * Devuelve una lista con todos los positivos notificados desde la aplicación móvil.
+ */
+positiveRouter.get('/getAllPositives', positiveController.getAllPositives.bind(positiveController))
+
 module.exports = {
     positiveRouter
 }
