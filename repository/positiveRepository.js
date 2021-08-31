@@ -1,4 +1,5 @@
 const dateFormat = require('dateformat')
+const firebase = require('firebase-admin')
 
 /**
  * Repositorio para gestionar los positivos notificados en el sistema.
@@ -10,6 +11,30 @@ class PositiveRepository {
         this.COLLECTION_POSITIVES = "positives" // Nombre de la colección
     }
 
+
+    /**
+     * Devuelve en el callback de éxito un listado con todos los positivos
+     * notificados, ordenados por timestamp de notificación descendente.
+     * 
+     * @param {callback} success Callback de éxito.
+     * @param {callback} fail Callback de fallo. 
+     */
+    getAllPositives(success, fail) {
+        this.db.collection(this.COLLECTION_POSITIVES)
+            .orderBy('timestamp', 'desc')
+            .get()
+            .then(result => {
+                let positives = []
+                result.forEach(doc => {
+                    let positive = doc.data()
+                    positive.positiveCode = doc.id // ID del documento como código del positivo.
+                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp de firebase a Date.
+                    positives.push(positive)
+                })
+                success(positives)
+            })
+            .catch(error => fail(error))
+    }
 
     /**
      * Inserta el positivo en la base de datos. Inserta todas las localizaciones
@@ -25,7 +50,10 @@ class PositiveRepository {
             location => dateFormat(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
-
+        // Convertir fecha a timestamp
+        let millis = Date.parse(positive.timestamp)
+        let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
+        positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
@@ -50,6 +78,7 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // Establecer el id del documento
+                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp a fecha
                     positives.push(positive)
                 })
                 success(positives)

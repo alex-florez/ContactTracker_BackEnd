@@ -56,6 +56,20 @@ class PositiveController {
                 res.json([]) // Enviar un JSON vacío
             })
     }
+
+
+    /**
+     * GET
+     * Devuelve una lista con todos los positivos notificados desde la aplicación móvil.
+     */
+    getAllPositives(req, res) {
+        this.repository.getAllPositives(positives => {
+            res.json(positives)
+        }, error => {
+            console.log("Error al recuperar todos los positivos.")
+            res.json({})
+        })
+    }
 }
 
 module.exports = PositiveController
