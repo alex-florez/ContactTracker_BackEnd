@@ -85,6 +85,30 @@ class PositiveRepository {
             })
             .catch(fail)
     }
+
+    /**
+     * Devuelve en el callback de éxito una lista con los positivos notificados entre 
+     * las fechas y horas pasadas como parámetro.
+     * 
+     * @param {date} start Fecha de inicio.
+     * @param {date} end Fecha de fin.
+     * @param {callback} success Callback de éxito. 
+     * @param {callback} fail Callback de fallo.
+     */
+    getPositivesNotifiedWithinDates(start, end, success, fail) {
+        this.db.collection(this.COLLECTION_POSITIVES)
+            .where('timestamp', '>=', start)
+            .where('timestamp', '<=', end)
+            .get()
+            .then(result => {
+                let positives = []
+                result.forEach(doc => {
+                    positives.push(doc.data())
+                })
+                success(positives)
+            })
+            .catch(error => fail(error))
+    }
 }
 
 module.exports = PositiveRepository

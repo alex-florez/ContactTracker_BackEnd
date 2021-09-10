@@ -7,6 +7,7 @@ const PositiveController = require('../controllers/PositiveController.js')
 const StatisticsRepository = require('../repository/statisticsRepository.js')
 const StatisticsController = require('../controllers/StatisticsController.js')
 
+const NotificationManager = require('../notifications/NotificationManager.js')
 
 // Configuración del SDK Admin para la base de datos Firestore de Firebase
 const db = require('../db/firebase_config.js').config_firebase()
@@ -23,6 +24,9 @@ statisticsRepositoryInstance = null
 configControllerInstance = null
 positiveControllerInstance = null
 statisticsControllerInstance = null
+
+// Managers
+notificationManagerInstance = null
 
 /**
  * Módulo de Inyección de Dependencias (DI) para la aplicación.
@@ -71,5 +75,13 @@ module.exports = {
             statisticsControllerInstance = new StatisticsController(this.statisticsRepository())
         }
         return statisticsControllerInstance
+    },
+
+    /* Manager de Notificaciones */
+    notificationManager: function() {
+        if(notificationManagerInstance == null) {
+            notificationManagerInstance = new NotificationManager(this.positiveRepository())
+        }
+        return notificationManagerInstance
     }
 }
