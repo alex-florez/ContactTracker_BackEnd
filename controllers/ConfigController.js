@@ -3,8 +3,9 @@
  */
 class ConfigController {
 
-    constructor(configRepository) {
+    constructor(configRepository, notificationManager) {
         this.repository = configRepository // Repositorio de configuración
+        this.notificationManager = notificationManager // Manager de notificaciones.
     }
 
     /**
@@ -15,6 +16,8 @@ class ConfigController {
     updateNotifyConfig(req, res) {
         this.repository.updateNotifyConfig(req.body,
             (docRef) => {
+                /* Actualizar alarmas de notificaciones */
+                this.notificationManager.schedulePositivesNotifications(req.body.positivesNotificationTime)
                 res.json({
                     updated: true,
                     msg: 'Configuración actualizada correctamente.'

@@ -1,24 +1,56 @@
 const cron = require('node-cron')
 const admin = require('firebase-admin')
 
+// Task Keys
+const SEND_POSITIVES_NOTIFICATION = "sendPositivesNotification"
+
 /**
  * Manager para gestionar la programación y envío de notificaciones
  * downstream a los clienntes Android.
  */
 class NotificationManager {
 
-    constructor(positivesRepository) {
-        this.positivesRepository = positivesRepository // Repositorio de positivos.
+    constructor(positivesRepository, configRepository) {
+        this.positivesRepository = positivesRepository, // Repositorio de positivos.
+        this.configRepository = configRepository, // Repositorio de configuración.
+        this.scheduledTasks = {} // Mapa de tareas programadas
     }
 
     /**
      * Reprograma las Cron Tasks para que se ejecuten periodicamente
-     * en función de la configuración establecida.
+     * en función de la configuración establecida en la base de datos.
      */
-    scheduleNotifications() {
-        cron.schedule("* * * * *", () => {
+     scheduleNotifications() {
+        /* Mensaje de número de positivos notificados en el día de hoy */
+        this.configRepository.retrieveConfig("notify-config", (configData) => { // Recuperar horas y minutos de la alarma en la configuración.
+            let time = configData.positivesNotificationTime
+            this.schedulePositivesNotifications(time)
+        }, error => {
+            console.log("Error al recuperar la configuración.")
+        })
+    }
+
+    /**
+     * Crea una nueva tarea periódica en la hora indicada como parámetro para
+     * enviar notificaciones diarias sobre los positivos notificados. 
+     * 
+     * @param {string} time Hora y minutos en formato 'HH:mm' a la que enviar las notificaciones.
+     */
+    schedulePositivesNotifications(time) {
+        let splittedTime = time.split(':')
+        // Formar la expresión de CRON
+        let cronExpr = `${splittedTime[1]} ${splittedTime[0]} * * *`
+        // Cancelar la tarea anterior
+        let lastTask = this.scheduledTasks[SEND_POSITIVES_NOTIFICATION]
+        if(lastTask != null){
+            lastTask.stop()
+        }
+        // Programar la nueva tarea
+        let task = cron.schedule(cronExpr, () => {
             this.sendPositivesNotification()
         })
+        // Almacenar task
+        this.scheduledTasks[SEND_POSITIVES_NOTIFICATION] = task
     }
 
     /**

@@ -57,10 +57,10 @@ module.exports = {
 
     /* Controllers */
     configController: function() {
-        if(configRepositoryInstance == null){
-            configRepositoryInstance = new ConfigController(this.configRepository())
+        if(configControllerInstance == null){
+            configControllerInstance = new ConfigController(this.configRepository(), this.notificationManager())
         }
-        return configRepositoryInstance
+        return configControllerInstance
     },
 
     positiveController: function() {
@@ -80,7 +80,7 @@ module.exports = {
     /* Manager de Notificaciones */
     notificationManager: function() {
         if(notificationManagerInstance == null) {
-            notificationManagerInstance = new NotificationManager(this.positiveRepository())
+            notificationManagerInstance = new NotificationManager(this.positiveRepository(), this.configRepository())
         }
         return notificationManagerInstance
     }
