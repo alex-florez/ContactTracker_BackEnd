@@ -34,8 +34,8 @@ class StatisticsRepository {
 
     constructor(db) {
         this.db = db // Referencia a Firestore 
-        this.COLLECTION_STATISTICS = "statistics" // Colección con las estadísticas
-        this.COLLECTION_POSITIVES = "positives" // Colección con los positivos
+        this.COLLECTION_STATISTICS = `${process.env.FIRESTORE_ENV}/statistics` // Colección con las estadísticas
+        this.COLLECTION_POSITIVES = `${process.env.FIRESTORE_ENV}/positives` // Colección con los positivos
     }
 
 

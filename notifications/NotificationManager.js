@@ -26,7 +26,7 @@ class NotificationManager {
             let time = configData.positivesNotificationTime
             this.schedulePositivesNotifications(time)
         }, error => {
-            console.log("Error al recuperar la configuración.")
+            console.log("Error al recuperar la configuración.", error)
         })
     }
 

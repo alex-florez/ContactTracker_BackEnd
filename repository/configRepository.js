@@ -5,7 +5,8 @@ class ConfigRepository {
 
     constructor(db) {
         this.db = db // Referencia a Firestore
-        this.COLLECTION_CONFIG = 'configuration'  // Nombre de la colección
+        // this.COLLECTION_CONFIG = 'configuration'  // Nombre de la colección
+        this.COLLECTION_CONFIG = `${process.env.FIRESTORE_ENV}/configuration`
     }
 
     /**

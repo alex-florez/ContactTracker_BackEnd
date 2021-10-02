@@ -8,7 +8,7 @@ class PositiveRepository {
 
     constructor(db){
         this.db = db // Referencia a Firestore
-        this.COLLECTION_POSITIVES = "positives" // Nombre de la colección
+        this.COLLECTION_POSITIVES = `${process.env.FIRESTORE_ENV}/positives` // Nombre de la colección
     }
 
 
@@ -104,6 +104,21 @@ class PositiveRepository {
                 let positives = []
                 result.forEach(doc => {
                     positives.push(doc.data())
+                })
+                success(positives)
+            })
+            .catch(error => fail(error))
+    }
+
+    pruebaGet(success, fail) {
+        this.db.collection('contacttracker/test/positivos')
+            .get()
+            .then(result => {
+                let positives = []
+                result.forEach(doc => {
+                    let p = doc.data()
+                    p.id = doc.id
+                    positives.push(p)
                 })
                 success(positives)
             })

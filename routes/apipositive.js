@@ -31,6 +31,9 @@ positiveRouter.get('/getPositives/:lastDays', positiveController.getPositives.bi
  */
 positiveRouter.get('/getAllPositives', positiveController.getAllPositives.bind(positiveController))
 
+
+positiveRouter.get('/pruebaGet', positiveController.pruebaGet.bind(positiveController))
+
 module.exports = {
     positiveRouter
 }
