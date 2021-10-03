@@ -1,4 +1,5 @@
 const dateFormat = require('dateformat')
+const {parse} = require('date-format-parse')
 
 /**
  * Controlador para las peticiones realizadas a la API de positivos.
@@ -16,19 +17,24 @@ class PositiveController {
      * el n.º de localizaciones registradas y el ID único del positivo.
      */
     notifyPositive(req, res) {
-        this.repository.addPositive(req.body, (docRef) => {
-            console.log(`Nuevo positivo registrado ${docRef.id}`)
-            // Respuesta
-            res.json({
-                positiveCode: docRef.id, // Código del positivo (ID del documento)
-                uploadedLocations: req.body.locations.length // N.º de localizaciones registradas.
+        let positive = req.body
+        if(typeof positive === 'undefined' || positive == null || Object.keys(positive).length === 0) {
+            res.sendStatus(400)
+        } else {
+            this.repository.addPositive(positive, (docRef) => {
+                console.log(`Nuevo positivo registrado ${docRef.id}`)
+                // Respuesta
+                res.json({
+                    positiveCode: docRef.id, // Código del positivo (ID del documento)
+                    uploadedLocations: positive.locations.length // N.º de localizaciones registradas.
+                })
+            }, (error) => {
+                console.log(`Error al insertar positivo: ${error}`)
+                res.json({
+                    uploadedLocations: 0
+                })
             })
-        }, (error) => {
-            console.log(`Error al insertar positivo: ${error}`)
-            res.json({
-                uploadedLocations: 0
-            })
-        })
+        }
     }
 
 
@@ -36,16 +42,18 @@ class PositiveController {
      * GET
      * Devuelve una lista de positivos que tengan localizaciones registradas
      * en los últimos días indicados con el número de días pasado como 
-     * parámetro de Ruta.
+     * parámetro de Ruta, tomando como referencia la fecha objetivo recibida en el 
+     * cuerpo de la petición formateada a milisegundos.
      */
     getPositives(req,res) {
+        let targetDate = new Date(parseInt(req.params.targetDate))
         let lastDays = parseInt(req.params.lastDays)
         /* Construir el array de fechas */
         let queryDates = []
-        let now = new Date() // Fecha actual
-        for(let i = 0; i <= lastDays; i++){
-            let diff = new Date(new Date().setDate(now.getDate() - i))
-            queryDates.push(dateFormat(diff, "yyyy-mm-dd"))
+        for(let i = 0; i <= lastDays; i++) {
+            let date = new Date(targetDate.getTime())
+            date.setDate(date.getDate() - i) // Restar i días
+            queryDates.push(dateFormat(date, "yyyy-mm-dd"))
         }
         /* Query para recuperar los positivos que tengan localizaciones en esas fechas.*/
         this.repository.getPositivesWithinDates(queryDates,

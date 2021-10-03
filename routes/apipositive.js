@@ -22,7 +22,7 @@ positiveRouter.post('/notifyPositive', positiveController.notifyPositive.bind(po
  * en los últimos días indicados con el número de días pasado como 
  * parámetro de Ruta.
  */
-positiveRouter.get('/getPositives/:lastDays', positiveController.getPositives.bind(positiveController))
+positiveRouter.get('/getPositives/:targetDate/:lastDays', positiveController.getPositives.bind(positiveController))
 
 
 /**
@@ -31,8 +31,6 @@ positiveRouter.get('/getPositives/:lastDays', positiveController.getPositives.bi
  */
 positiveRouter.get('/getAllPositives', positiveController.getAllPositives.bind(positiveController))
 
-
-positiveRouter.get('/pruebaGet', positiveController.pruebaGet.bind(positiveController))
 
 module.exports = {
     positiveRouter

@@ -81,6 +81,10 @@ class PositiveRepository {
                     positive.timestamp = positive.timestamp.toDate() // Convertir timestamp a fecha
                     positives.push(positive)
                 })
+                // Ordenarlos por timestamp
+                positives.sort(function(a, b) {
+                    return b.timestamp - a.timestamp
+                })
                 success(positives)
             })
             .catch(fail)
@@ -110,19 +114,25 @@ class PositiveRepository {
             .catch(error => fail(error))
     }
 
-    pruebaGet(success, fail) {
-        this.db.collection('contacttracker/test/positivos')
-            .get()
-            .then(result => {
-                let positives = []
-                result.forEach(doc => {
-                    let p = doc.data()
-                    p.id = doc.id
-                    positives.push(p)
+    /**
+     * Método utilizado en las pruebas de Integración para
+     * la API REST, de forma que se eliminen todos los positivos
+     * de la base de datos.
+     */
+    deleteAllPositives(complete) {
+        let batchDelete = this.db.batch()
+
+        this.db.collection(this.COLLECTION_POSITIVES)
+            .listDocuments()
+            .then(docs => {
+                docs.forEach(doc => {
+                    batchDelete.delete(doc)
                 })
-                success(positives)
-            })
-            .catch(error => fail(error))
+
+                batchDelete.commit().then(() => {
+                    complete()
+                })
+            }).catch(error => console.log(error))
     }
 }
 

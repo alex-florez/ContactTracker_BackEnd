@@ -14,21 +14,26 @@ class ConfigController {
      * @param {object} res Respuesta
      */
     updateNotifyConfig(req, res) {
-        this.repository.updateNotifyConfig(req.body,
-            (docRef) => {
-                /* Actualizar alarmas de notificaciones */
-                this.notificationManager.schedulePositivesNotifications(req.body.positivesNotificationTime)
-                res.json({
-                    updated: true,
-                    msg: 'Configuración actualizada correctamente.'
+        let newConfig = req.body
+        if(typeof newConfig === 'undefined' || newConfig == null || Object.keys(newConfig).length === 0) {
+            res.sendStatus(400)
+        } else {
+            this.repository.updateNotifyConfig(newConfig,
+                (docRef) => {
+                    /* Actualizar alarmas de notificaciones */
+                    this.notificationManager.schedulePositivesNotifications(newConfig.positivesNotificationTime)
+                    res.json({
+                        updated: true,
+                        msg: 'Configuración actualizada correctamente.'
+                    })
+                }, (error) => {
+                    console.log(`Error al actualizar la configuración de la notificación de positivos: ${error}`)
+                    res.json({
+                        updated: false,
+                        msg: 'Ha habido un error al actualizar la configuracion de la notificación de positivos.'
+                    })
                 })
-            }, (error) => {
-                console.log(`Error al actualizar la configuración de la notificación de positivos: ${error}`)
-                res.json({
-                    updated: false,
-                    msg: 'Ha habido un error al actualizar la configuracion de la notificación de positivos.'
-                })
-            })
+        }
     }
 
     /**
@@ -37,19 +42,24 @@ class ConfigController {
      * @param {object} res Respuesta
      */
     updateRiskContactConfig(req, res) {
-        this.repository.updateRiskContactConfig(req.body,
-            (docRef) => {
-                res.json({
-                    updated: true,
-                    msg: 'Configuración actualizada correctamente.'
+        let newConfig = req.body
+        if(typeof newConfig === 'undefined' || newConfig == null || Object.keys(newConfig).length === 0) {
+            res.sendStatus(400)
+        } else {
+            this.repository.updateRiskContactConfig(newConfig,
+                (docRef) => {
+                    res.json({
+                        updated: true,
+                        msg: 'Configuración actualizada correctamente.'
+                    })
+                }, (error) => {
+                    console.log(`Error al actualizar la configuración de la comprobación: ${error}`)
+                    res.json({
+                        updated: false,
+                        msg: 'Ha habido un error al actualizar la configuración de la comprobación.'
+                    })
                 })
-            }, (error) => {
-                console.log(`Error al actualizar la configuración de la comprobación: ${error}`)
-                res.json({
-                    updated: false,
-                    msg: 'Ha habido un error al actualizar la configuración de la comprobación.'
-                })
-            })
+        }
     }
 
     /**
@@ -61,7 +71,11 @@ class ConfigController {
     getConfig(req, res) {
         let configFile = req.params.fileName
         this.repository.retrieveConfig(configFile, (configData) => {
-            res.json(configData)
+            if(configData == null || Object.keys(configData).length === 0){
+                res.sendStatus(404)
+            } else {
+                res.json(configData)
+            }
         }, (error) => {
             res.json({})
         })
