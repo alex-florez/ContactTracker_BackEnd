@@ -11,167 +11,13 @@ describe('Positives API', () => {
     // Before Each (antes de cada Test)
     beforeEach((done) => {
         // Positivos de prueba
-        let p1 = {
-            timestamp: "2021-10-01 12:45:06",
-            asymptomatic: true,
-            vaccinated: false,
-            locations: [{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 0,
-                point: {
-                    lat: 43.45,
-                    lng: -5.98,
-                    locationTimestamp: Date.parse("2021-09-26 10:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 1,
-                point: {
-                    lat: 43.44,
-                    lng: -5.97,
-                    locationTimestamp: Date.parse("2021-09-26 10:30:15")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 2,
-                point: {
-                    lat: 43.43,
-                    lng: -5.96,
-                    locationTimestamp: Date.parse("2021-09-28 11:15:20")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 3,
-                point: {
-                    lat: 42.43,
-                    lng: -5.95,
-                    locationTimestamp: Date.parse("2021-09-29 14:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 4,
-                point: {
-                    lat: 43.44,
-                    lng: -5.98,
-                    locationTimestamp: Date.parse("2021-09-30 18:25:45")
-                }
-            }]
-        }
-
-        let p2 = {
-            timestamp: "2021-10-02 21:20:20",
-            asymptomatic: false,
-            vaccinated: false,
-            locations: [{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 0,
-                point: {
-                    lat: 44.45,
-                    lng: -6.98,
-                    locationTimestamp: Date.parse("2021-09-24 10:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 1,
-                point: {
-                    lat: 44.44,
-                    lng: -6.97,
-                    locationTimestamp: Date.parse("2021-09-24 10:30:15")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 2,
-                point: {
-                    lat: 44.53,
-                    lng: -6.96,
-                    locationTimestamp: Date.parse("2021-09-30 11:15:20")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 3,
-                point: {
-                    lat: 44.33,
-                    lng: -6.95,
-                    locationTimestamp: Date.parse("2021-10-02 14:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 4,
-                point: {
-                    lat: 44.44,
-                    lng: -6.98,
-                    locationTimestamp: Date.parse("2021-10-02 18:25:45")
-                }
-            }]
-        }
-
-        let p3 = {
-            timestamp: "2021-09-26 16:32:10",
-            asymptomatic: false,
-            vaccinated: false,
-            locations: [{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 0,
-                point: {
-                    lat: 44.55,
-                    lng: -6.98,
-                    locationTimestamp: Date.parse("2021-09-20 10:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 1,
-                point: {
-                    lat: 44.44,
-                    lng: -6.97,
-                    locationTimestamp: Date.parse("2021-09-20 10:30:15")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 2,
-                point: {
-                    lat: 44.53,
-                    lng: -6.96,
-                    locationTimestamp: Date.parse("2021-09-20 11:15:20")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 3,
-                point: {
-                    lat: 44.33,
-                    lng: -6.95,
-                    locationTimestamp: Date.parse("2021-09-23 14:30:10")
-                }
-            },{
-                accuracy: 0.0,
-                provider: "testing",
-                userlocationID: 4,
-                point: {
-                    lat: 44.44,
-                    lng: -6.98,
-                    locationTimestamp: Date.parse("2021-09-23 18:25:45")
-                }
-            }]
-        }
+        let positives = getTestPositives()
         // Eliminar positivos
         di.positiveRepository().deleteAllPositives(() => {
             // Rellenar base de datos con positivos
-            di.positiveRepository().addPositive(p1, (docRef) => {
-                di.positiveRepository().addPositive(p2, (docRef) => {
-                    di.positiveRepository().addPositive(p3, (docRef) => {
+            di.positiveRepository().addPositive(positives[0], (docRef) => {
+                di.positiveRepository().addPositive(positives[1], (docRef) => {
+                    di.positiveRepository().addPositive(positives[2], (docRef) => {
                         done()
                     }, (error) => {console.log("Error al insertar el positivo.")})
                 }, (error) => {console.log("Error al insertar el positivo.")})
@@ -461,7 +307,170 @@ describe('Positives API', () => {
                 })
         })
     })
-
-
-
 })
+
+
+// MÉTODOS AUXILIARES
+
+
+/**
+ * Devuelve una lista con los positivos de prueba.
+ */
+function getTestPositives() {
+    let p1 = {
+        timestamp: "2021-10-01 12:45:06",
+        asymptomatic: true,
+        vaccinated: false,
+        locations: [{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 0,
+            point: {
+                lat: 43.45,
+                lng: -5.98,
+                locationTimestamp: Date.parse("2021-09-26 10:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 1,
+            point: {
+                lat: 43.44,
+                lng: -5.97,
+                locationTimestamp: Date.parse("2021-09-26 10:30:15")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 2,
+            point: {
+                lat: 43.43,
+                lng: -5.96,
+                locationTimestamp: Date.parse("2021-09-28 11:15:20")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 3,
+            point: {
+                lat: 42.43,
+                lng: -5.95,
+                locationTimestamp: Date.parse("2021-09-29 14:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 4,
+            point: {
+                lat: 43.44,
+                lng: -5.98,
+                locationTimestamp: Date.parse("2021-09-30 18:25:45")
+            }
+        }]
+    }
+
+    let p2 = {
+        timestamp: "2021-10-02 21:20:20",
+        asymptomatic: false,
+        vaccinated: false,
+        locations: [{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 0,
+            point: {
+                lat: 44.45,
+                lng: -6.98,
+                locationTimestamp: Date.parse("2021-09-24 10:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 1,
+            point: {
+                lat: 44.44,
+                lng: -6.97,
+                locationTimestamp: Date.parse("2021-09-24 10:30:15")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 2,
+            point: {
+                lat: 44.53,
+                lng: -6.96,
+                locationTimestamp: Date.parse("2021-09-30 11:15:20")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 3,
+            point: {
+                lat: 44.33,
+                lng: -6.95,
+                locationTimestamp: Date.parse("2021-10-02 14:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 4,
+            point: {
+                lat: 44.44,
+                lng: -6.98,
+                locationTimestamp: Date.parse("2021-10-02 18:25:45")
+            }
+        }]
+    }
+
+    let p3 = {
+        timestamp: "2021-09-26 16:32:10",
+        asymptomatic: false,
+        vaccinated: false,
+        locations: [{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 0,
+            point: {
+                lat: 44.55,
+                lng: -6.98,
+                locationTimestamp: Date.parse("2021-09-20 10:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 1,
+            point: {
+                lat: 44.44,
+                lng: -6.97,
+                locationTimestamp: Date.parse("2021-09-20 10:30:15")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 2,
+            point: {
+                lat: 44.53,
+                lng: -6.96,
+                locationTimestamp: Date.parse("2021-09-20 11:15:20")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 3,
+            point: {
+                lat: 44.33,
+                lng: -6.95,
+                locationTimestamp: Date.parse("2021-09-23 14:30:10")
+            }
+        },{
+            accuracy: 0.0,
+            provider: "testing",
+            userlocationID: 4,
+            point: {
+                lat: 44.44,
+                lng: -6.98,
+                locationTimestamp: Date.parse("2021-09-23 18:25:45")
+            }
+        }]
+    }
+    return [p1, p2, p3]
+}

@@ -31,7 +31,7 @@ statisticsRouter.post('/registerCheckResult', statisticsController.newCheckResul
  *  - N.º de positivos asintomáticos.
  *  - N.º de positivos vacunados.
  */
-statisticsRouter.get('/positives/:lastDays', statisticsController.positiveStatistics.bind(statisticsController))
+statisticsRouter.get('/positives/:targetDate/:lastDays', statisticsController.positiveStatistics.bind(statisticsController))
 
 /**
  * GET
@@ -43,7 +43,7 @@ statisticsRouter.get('/positives/:lastDays', statisticsController.positiveStatis
  *  - Tiempo de exposición medio (en milisegundos).
  *  - Proximidad media (en metros).
  */
-statisticsRouter.get('/checks/:lastDays', statisticsController.checkStatistics.bind(statisticsController))
+statisticsRouter.get('/checks/:targetDate/:lastDays', statisticsController.checkStatistics.bind(statisticsController))
 
 
 /**
@@ -53,7 +53,7 @@ statisticsRouter.get('/checks/:lastDays', statisticsController.checkStatistics.b
  * Se trata de un dato estadístico virtual, es decir, no representa realmente las descargas de 
  * la aplicación, ya que se calcula teniendo en cuenta la primera vez que se inicia la aplicación.
  */
-statisticsRouter.get('/installs/:lastDays', statisticsController.installationStatistics.bind(statisticsController))
+statisticsRouter.get('/installs/:targetDate/:lastDays', statisticsController.installationStatistics.bind(statisticsController))
 
 module.exports = {
     statisticsRouter

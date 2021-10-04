@@ -9,8 +9,8 @@ const firebase = require('firebase-admin')
  *  > 0: se corresponde con el día de hoy.
  *  > -1: se corresponde con infinito (todos los valores existentes)
  */
-function getFilterDates(lastDays) {
-    let now = new Date()
+function getFilterDates(targetDate, lastDays) {
+    let now = targetDate
     if(lastDays == 0) {
         let startDate = new Date(now)
         startDate.setHours(0,0,0)
@@ -93,13 +93,14 @@ class StatisticsRepository {
      * 
      * Si surge algún error devuelve el error concreto en el callback de fallo.
      * 
+     * @param {date} targetDate Fecha de referencia.
      * @param {number} lastDays N.º de días a tener en cuenta para recuperar las estadísticas.
      * @param {callback} success Callback de éxito. 
      * @param {callback} fail Callback de fallo.
      */
-    getPositivesStatistics(lastDays, success, fail) {
+    getPositivesStatistics(targetDate, lastDays, success, fail) {
         // Filtro de fechas
-        let dates = getFilterDates(lastDays)
+        let dates = getFilterDates(targetDate, lastDays)
         // Callback de procesamiento de los positivos
         let callback = (positives) => {
             // Realizar el recuento
@@ -151,13 +152,14 @@ class StatisticsRepository {
      * 
      * Si surge algún error devuelve el error concreto en el callback de fallo.
      * 
+     * @param {date} targetDate Fecha de referencia.
      * @param {number} lastDays Días utilizados para filtrar.
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    getChecksStatistics(lastDays,success, fail) {
+    getChecksStatistics(targetDate, lastDays,success, fail) {
         // Filtro de fecha
-        let dates = getFilterDates(lastDays)
+        let dates = getFilterDates(targetDate, lastDays)
         this.db.collection(this.COLLECTION_STATISTICS)
         .doc('check-results')
         .get()
@@ -197,13 +199,14 @@ class StatisticsRepository {
      * Devuelve el número de descargas de la aplicación móvil, registradas
      * en los últimos X días, siendo X los días indicados como parámetro.
      * 
-     * @param {number} lastDays Días utilizados para filtrar
+     * @param {date} targetDate Fecha de referencia.
+     * @param {number} lastDays Días utilizados para filtrar.
      * @param {callback} success Callback de éxito.
      * @param {callback} fail Callback de fallo.
      */
-    getInstalls(lastDays, success, fail) {
+    getInstalls(targetDate, lastDays, success, fail) {
         // Fechas del filtro
-        let dates = getFilterDates(lastDays)
+        let dates = getFilterDates(targetDate, lastDays)
         this.db.collection(this.COLLECTION_STATISTICS)
         .doc('installations')
         .get()
@@ -223,6 +226,26 @@ class StatisticsRepository {
             }
         })
         .catch(error => fail(error))
+    }
+
+
+    /**
+     * Método utilizado en los tests de la API de estadísticas
+     * para vaciar la base de datos de estadísticas.
+     */
+    deleteAllStatistics(complete) {
+        let batchDelete = this.db.batch()
+        this.db.collection(this.COLLECTION_STATISTICS)
+            .listDocuments()
+            .then(docs => {
+                docs.forEach(doc => {
+                    batchDelete.delete(doc)
+                })
+
+                batchDelete.commit().then(() => {
+                    complete()
+                })
+            }).catch(error => console.log(error))
     }
 
 }
