@@ -6,6 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --timeout 10000",
     "start": "cross-env NODE_ENV=production nodemon app.js",
+    "startTest": "cross-env NODE_ENV=test nodemon app.js",
     "nm": "nodemon app.js"
   },
   "repository": {
