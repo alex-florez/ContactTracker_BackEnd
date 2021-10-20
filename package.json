@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --timeout 10000",
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "startTest": "cross-env NODE_ENV=test nodemon app.js",
     "nm": "nodemon app.js"
   },
