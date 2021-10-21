@@ -4,10 +4,10 @@
   "description": "BackEnd server for ContactTracker Web App",
   "main": "app.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --timeout 10000",
-    "start": "node app.js",
+    "test": "cross-env NODE_ENV=test mocha --timeout 10000", 
+    "startDev": "cross-env NODE_ENV=production nodemon app.js",
     "startTest": "cross-env NODE_ENV=test nodemon app.js",
-    "nm": "nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
