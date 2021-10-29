@@ -99,7 +99,7 @@ class PositiveRepository {
      * @param {callback} success Callback de éxito. 
      * @param {callback} fail Callback de fallo.
      */
-    getPositivesNotifiedWithinDates(start, end, success, fail) {
+    getPositivesNotifiedBetweenDates(start, end, success, fail) {
         this.db.collection(this.COLLECTION_POSITIVES)
             .where('timestamp', '>=', start)
             .where('timestamp', '<=', end)

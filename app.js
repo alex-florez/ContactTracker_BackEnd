@@ -4,8 +4,6 @@ require('dotenv').config({path: `.env.${process.env.NODE_ENV}`}) // Cargar varia
 
 const app = express() // Aplicación Express
 
-const admin = require('firebase-admin') // Admin SDK de Firebase
-
 const notificationManager = require('./di/AppModule.js').notificationManager() // Manager para las notificaciones.
 
 app.use(express.json()) // Body Parser para el JSON
