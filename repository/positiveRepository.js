@@ -51,10 +51,9 @@ class PositiveRepository {
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
         // Convertir fecha a timestamp
-        console.log(positive.timestamp)
         let millis = Date.parse(positive.timestamp)
-        console.log(millis)
         let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
+        console.log(positive.timestamp)
         positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)

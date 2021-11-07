@@ -2,6 +2,8 @@ const express = require('express')
 var cors = require('cors')
 require('dotenv').config({path: `.env.${process.env.NODE_ENV}`}) // Cargar variables de entorno
 
+const firebase = require('firebase-admin')
+
 const app = express() // Aplicación Express
 
 const notificationManager = require('./di/AppModule.js').notificationManager() // Manager para las notificaciones.
@@ -25,5 +27,10 @@ const firestore_env = process.env.FIRESTORE_ENV
 app.listen(port, () => {
     console.log(`Server listening at http://${hostname}:${port} - Firestore Enviroment: ${firestore_env}`)
 })
+
+let pruebaMillis = Date.parse("2021-11-08 00:10:09")
+console.log(firebase.firestore.Timestamp.fromMillis(pruebaMillis).toDate().toLocaleString())
+
+
 
 module.exports = app
