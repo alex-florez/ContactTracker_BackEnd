@@ -21,6 +21,7 @@ class PositiveController {
         if(typeof positive === 'undefined' || positive == null || Object.keys(positive).length === 0) {
             res.sendStatus(400)
         } else {
+            console.log(positive)
             this.repository.addPositive(positive, (docRef) => {
                 console.log(`Nuevo positivo registrado ${docRef.id}`)
                 // Respuesta
