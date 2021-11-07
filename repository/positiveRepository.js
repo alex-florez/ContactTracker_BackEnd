@@ -53,7 +53,7 @@ class PositiveRepository {
         // Convertir fecha a timestamp
         let millis = Date.parse(positive.timestamp)
         let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
-        console.log(positive.timestamp)
+        console.log(timestamp.toDate().toLocaleString())
         positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
