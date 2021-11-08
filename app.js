@@ -20,7 +20,7 @@ app.use('/', API)
 /* Reprogramar Cron Tasks establecidas en la configuración */
 notificationManager.scheduleNotifications()
 
-const port = process.env.port || 8080
+const port = process.env.PORT || 8080
 const hostname = 'localhost'
 const firestore_env = process.env.FIRESTORE_ENV
 
