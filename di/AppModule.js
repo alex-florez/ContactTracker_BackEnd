@@ -4,7 +4,7 @@ const ConfigController = require('../controllers/ConfigController.js')
 const PositiveRepository = require('../repository/PositiveRepository.js')
 const PositiveController = require('../controllers/PositiveController.js')
 
-const StatisticsRepository = require('../repository/statisticsRepository.js')
+const StatisticsRepository = require('../repository/StatisticsRepository.js')
 const StatisticsController = require('../controllers/StatisticsController.js')
 
 const NotificationManager = require('../notifications/NotificationManager.js')
