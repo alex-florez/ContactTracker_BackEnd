@@ -38,8 +38,16 @@ class NotificationManager {
      */
     schedulePositivesNotifications(time) {
         let splittedTime = time.split(':')
+        let hour = splittedTime[0]
+        let minute = splittedTime[1]
+        // Comprobar el desfase temporal
+        if(process.env.REMOTE_DEPLOY == 'Azure') {
+            // Restar una hora menos por el desfase temporal
+            hour = (parseInt(splittedTime[0]) - 1).toString()
+        }
         // Formar la expresión de CRON
-        let cronExpr = `${splittedTime[1]} ${splittedTime[0]} * * *`
+        let cronExpr = `${minute} ${hour} * * *`
+
         // Cancelar la tarea anterior
         let lastTask = this.scheduledTasks[SEND_POSITIVES_NOTIFICATION]
         if(lastTask != null){
@@ -51,7 +59,7 @@ class NotificationManager {
         })
         // Almacenar task
         this.scheduledTasks[SEND_POSITIVES_NOTIFICATION] = task
-        console.log(`Nueva tarea programada: Enviar notificaciones de positivos -> ${time}`)
+        console.log(`Nueva tarea programada: Enviar notificaciones de positivos -> ${hour}:${minute}`)
     }
 
     /**
