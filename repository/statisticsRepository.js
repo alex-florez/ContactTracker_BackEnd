@@ -101,7 +101,6 @@ class StatisticsRepository {
     getPositivesStatistics(targetDate, lastDays, success, fail) {
         // Filtro de fechas
         let dates = getFilterDates(targetDate, lastDays)
-        console.log(dates.map(d => d.toLocaleString()))
         // Callback de procesamiento de los positivos
         let callback = (positives) => {
             // Realizar el recuento

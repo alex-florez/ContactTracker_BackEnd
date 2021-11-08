@@ -89,15 +89,15 @@ class PositiveRepository {
      * Devuelve en el callback de éxito una lista con los positivos notificados entre 
      * las fechas y horas pasadas como parámetro.
      * 
-     * @param {date} start Fecha de inicio en milisegundos.
-     * @param {date} end Fecha de fin en milisegundos.
+     * @param {date} start Fecha de inicio.
+     * @param {date} end Fecha de fin.
      * @param {callback} success Callback de éxito. 
      * @param {callback} fail Callback de fallo.
      */
     getPositivesNotifiedBetweenDates(start, end, success, fail) {
         this.db.collection(this.COLLECTION_POSITIVES)
-            .where('timestamp', '>=', start)
-            .where('timestamp', '<=', end)
+            .where('timestamp', '>=', start.getTime())
+            .where('timestamp', '<=', end.getTime())
             .get()
             .then(result => {
                 let positives = []

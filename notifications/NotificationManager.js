@@ -51,6 +51,7 @@ class NotificationManager {
         })
         // Almacenar task
         this.scheduledTasks[SEND_POSITIVES_NOTIFICATION] = task
+        console.log(`Nueva tarea programada: Enviar notificaciones de positivos -> ${time}`)
     }
 
     /**
@@ -64,8 +65,8 @@ class NotificationManager {
         let start = new Date(now)
         start.setHours(0, 0, 0) // Inicio del día.
         // Recuperar los positivos notificados entre esas horas.
-        this.positivesRepository.getPositivesNotifiedWithinDates(
-            start,
+        this.positivesRepository.getPositivesNotifiedBetweenDates(
+            start,  
             now,
             positives => {
               // Enviar notificación con el n.º de positivos notificados.
@@ -83,7 +84,7 @@ class NotificationManager {
                 }
                 // Enviar mensaje
                 admin.messaging().send(message)
-                    .then(messageID => console.log("Mensaje de los positivos notificados enviado con éxito:", messageID))
+                    .then(messageID => console.log("Notificación enviada: N.º de positivos notificados - ", messageID))
                     .catch(error => console.log("Error al enviar el mensaje:", error))
                 }
             },
