@@ -29,7 +29,6 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // ID del documento como código del positivo.
-                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp de firebase a Date.
                     positives.push(positive)
                 })
                 success(positives)
@@ -51,17 +50,6 @@ class PositiveRepository {
             location => dateFormat(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
-
-        // Convertir fecha a timestamp
-        //let millis = Date.parse(positive.timestamp)
-        //let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
-   
-        console.log(positive.timestamp)
-        let dateData = positive.timestamp.split(/\D/)
-        let notifyDate = new Date(dateData[0], dateData[1]-1, dateData[2], dateData[3], dateData[4], dateData[5])
-        console.log(notifyDate)
-        let timestamp = firebase.firestore.Timestamp.fromDate(notifyDate)
-        positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
@@ -86,12 +74,11 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // Establecer el id del documento
-                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp a fecha
                     positives.push(positive)
                 })
                 // Ordenarlos por timestamp
                 positives.sort(function(a, b) {
-                    return b.timestamp - a.timestamp
+                    return a.timestamp - b.timestamp
                 })
                 success(positives)
             })
@@ -102,8 +89,8 @@ class PositiveRepository {
      * Devuelve en el callback de éxito una lista con los positivos notificados entre 
      * las fechas y horas pasadas como parámetro.
      * 
-     * @param {date} start Fecha de inicio.
-     * @param {date} end Fecha de fin.
+     * @param {date} start Fecha de inicio en milisegundos.
+     * @param {date} end Fecha de fin en milisegundos.
      * @param {callback} success Callback de éxito. 
      * @param {callback} fail Callback de fallo.
      */

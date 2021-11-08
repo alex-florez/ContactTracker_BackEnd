@@ -101,7 +101,7 @@ class StatisticsRepository {
     getPositivesStatistics(targetDate, lastDays, success, fail) {
         // Filtro de fechas
         let dates = getFilterDates(targetDate, lastDays)
-        console.log(dates.map(d => d.getTime()))
+        console.log(dates.map(d => d.toLocaleString()))
         // Callback de procesamiento de los positivos
         let callback = (positives) => {
             // Realizar el recuento
@@ -116,8 +116,8 @@ class StatisticsRepository {
         }
         if(dates.length > 0) {
             this.db.collection(this.COLLECTION_POSITIVES)
-            .where('timestamp', '>=', dates[0])
-            .where('timestamp', '<=', dates[1])
+            .where('timestamp', '>=', dates[0].getTime())
+            .where('timestamp', '<=', dates[1].getTime())
             .get()
             .then(result => {
                 // Crear array de positivos
