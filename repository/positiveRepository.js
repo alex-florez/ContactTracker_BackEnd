@@ -53,9 +53,10 @@ class PositiveRepository {
         positive.locationDates = locationDates
 
         // Convertir fecha a timestamp
-        let millis = Date.parse(positive.timestamp)
-        let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
+        //let millis = Date.parse(positive.timestamp)
+        //let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
    
+        console.log(positive.timestamp)
         let dateData = positive.timestamp.split(/\D/)
         let notifyDate = new Date(dateData[0], dateData[1]-1, dateData[2], dateData[3], dateData[4], dateData[5])
         console.log(notifyDate)
