@@ -115,8 +115,8 @@ class StatisticsRepository {
         }
         if(dates.length > 0) {
             this.db.collection(this.COLLECTION_POSITIVES)
-            .where('timestamp', '>=', dates[0])
-            .where('timestamp', '<=', dates[1])
+            .where('timestamp', '>=', dates[0].getTime())
+            .where('timestamp', '<=', dates[1].getTime())
             .get()
             .then(result => {
                 // Crear array de positivos

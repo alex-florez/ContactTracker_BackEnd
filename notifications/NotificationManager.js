@@ -38,8 +38,16 @@ class NotificationManager {
      */
     schedulePositivesNotifications(time) {
         let splittedTime = time.split(':')
+        let hour = splittedTime[0]
+        let minute = splittedTime[1]
+        // Comprobar el desfase temporal
+        if(process.env.REMOTE_DEPLOY == 'Azure' || process.env.REMOTE_DEPLOY == 'Heroku') {
+            // Restar una hora menos por el desfase temporal
+            hour = (parseInt(splittedTime[0]) - 1).toString()
+        }
         // Formar la expresión de CRON
-        let cronExpr = `${splittedTime[1]} ${splittedTime[0]} * * *`
+        let cronExpr = `${minute} ${hour} * * *`
+
         // Cancelar la tarea anterior
         let lastTask = this.scheduledTasks[SEND_POSITIVES_NOTIFICATION]
         if(lastTask != null){
@@ -51,6 +59,7 @@ class NotificationManager {
         })
         // Almacenar task
         this.scheduledTasks[SEND_POSITIVES_NOTIFICATION] = task
+        console.log(`Nueva tarea programada: Enviar notificaciones de positivos -> ${hour}:${minute}`)
     }
 
     /**
@@ -64,8 +73,8 @@ class NotificationManager {
         let start = new Date(now)
         start.setHours(0, 0, 0) // Inicio del día.
         // Recuperar los positivos notificados entre esas horas.
-        this.positivesRepository.getPositivesNotifiedWithinDates(
-            start,
+        this.positivesRepository.getPositivesNotifiedBetweenDates(
+            start,  
             now,
             positives => {
               // Enviar notificación con el n.º de positivos notificados.
@@ -83,7 +92,7 @@ class NotificationManager {
                 }
                 // Enviar mensaje
                 admin.messaging().send(message)
-                    .then(messageID => console.log("Mensaje de los positivos notificados enviado con éxito:", messageID))
+                    .then(messageID => console.log("Notificación enviada: N.º de positivos notificados - ", messageID))
                     .catch(error => console.log("Error al enviar el mensaje:", error))
                 }
             },

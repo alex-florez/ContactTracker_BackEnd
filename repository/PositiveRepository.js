@@ -1,4 +1,5 @@
 const dateFormat = require('dateformat')
+const { firestore } = require('firebase-admin')
 const firebase = require('firebase-admin')
 
 /**
@@ -28,7 +29,6 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // ID del documento como código del positivo.
-                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp de firebase a Date.
                     positives.push(positive)
                 })
                 success(positives)
@@ -50,10 +50,6 @@ class PositiveRepository {
             location => dateFormat(new Date(location.point.locationTimestamp), "yyyy-mm-dd")
         ).filter((date, index, array) => array.indexOf(date) === index)
         positive.locationDates = locationDates
-        // Convertir fecha a timestamp
-        let millis = Date.parse(positive.timestamp)
-        let timestamp = firebase.firestore.Timestamp.fromMillis(millis)
-        positive.timestamp = timestamp
         this.db.collection(this.COLLECTION_POSITIVES).add(positive).then(docRef => {
            success(docRef)
         }).catch(error => {
@@ -78,12 +74,11 @@ class PositiveRepository {
                 result.forEach(doc => {
                     let positive = doc.data()
                     positive.positiveCode = doc.id // Establecer el id del documento
-                    positive.timestamp = positive.timestamp.toDate() // Convertir timestamp a fecha
                     positives.push(positive)
                 })
                 // Ordenarlos por timestamp
                 positives.sort(function(a, b) {
-                    return b.timestamp - a.timestamp
+                    return a.timestamp - b.timestamp
                 })
                 success(positives)
             })
@@ -99,10 +94,10 @@ class PositiveRepository {
      * @param {callback} success Callback de éxito. 
      * @param {callback} fail Callback de fallo.
      */
-    getPositivesNotifiedWithinDates(start, end, success, fail) {
+    getPositivesNotifiedBetweenDates(start, end, success, fail) {
         this.db.collection(this.COLLECTION_POSITIVES)
-            .where('timestamp', '>=', start)
-            .where('timestamp', '<=', end)
+            .where('timestamp', '>=', start.getTime())
+            .where('timestamp', '<=', end.getTime())
             .get()
             .then(result => {
                 let positives = []

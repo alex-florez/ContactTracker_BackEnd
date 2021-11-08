@@ -79,14 +79,6 @@ class PositiveController {
         })
     }
 
-    pruebaGet(req, res) {
-        this.repository.pruebaGet(positives => {
-            res.json(positives)
-        }, error => {
-            console.log(error)
-            res.json({})
-        })
-    }
 }
 
 module.exports = PositiveController
