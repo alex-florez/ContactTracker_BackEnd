@@ -41,7 +41,7 @@ class NotificationManager {
         let hour = splittedTime[0]
         let minute = splittedTime[1]
         // Comprobar el desfase temporal
-        if(process.env.REMOTE_DEPLOY == 'Azure') {
+        if(process.env.REMOTE_DEPLOY == 'Azure' || process.env.REMOTE_DEPLOY == 'Heroku') {
             // Restar una hora menos por el desfase temporal
             hour = (parseInt(splittedTime[0]) - 1).toString()
         }
