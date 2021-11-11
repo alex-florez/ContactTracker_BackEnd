@@ -88,7 +88,7 @@ describe('Positives API', () => {
         it('[APIP4] Debería devolver 200 OK al notificar un positivo con localizaciones de un solo día', (done) => {
             // Positivo a insertar
             let p = {
-                timestamp: "2021-10-03 18:11:34",
+                timestamp: Date.parse("2021-10-03 18:11:34"),
                 asymptomatic: true,
                 vaccinated: true,
                 locations: [{
@@ -162,7 +162,7 @@ describe('Positives API', () => {
         it('[APIP5] Debería devolver 200 OK al notificar un positivo con localizaciones registradas en varios días', (done) => {
             // Positivo a insertar
             let p = {
-                timestamp: "2021-10-03 18:11:34",
+                timestamp: Date.parse("2021-10-03 18:11:34"),
                 asymptomatic: true,
                 vaccinated: true,
                 locations: [{
@@ -260,7 +260,7 @@ describe('Positives API', () => {
                     res.body.should.be.a('array')
                     res.body.length.should.be.eql(1)
                     let positive = res.body[0]
-                    let timestamp = new Date(Date.parse(positive.timestamp)).toLocaleString()
+                    let timestamp = new Date(positive.timestamp).toLocaleString()
                     timestamp.should.be.eql("2/10/2021 21:20:20")
                     done()
                 })
@@ -275,12 +275,12 @@ describe('Positives API', () => {
                     res.should.have.status(200)
                     res.body.should.be.a('array')
                     res.body.length.should.be.eql(2)
-                    let positive2 = res.body[0]
-                    let positive1 = res.body[1]
-                    let timestamp1 = new Date(Date.parse(positive1.timestamp)).toLocaleString()
-                    let timestamp2 = new Date(Date.parse(positive2.timestamp)).toLocaleString()
-                    timestamp1.should.be.eql("1/10/2021 12:45:06")
-                    timestamp2.should.be.eql("2/10/2021 21:20:20")
+                    let positive1 = res.body[0]
+                    let positive2 = res.body[1]
+                    let timestamp1 = new Date(positive1.timestamp).toLocaleString()
+                    let timestamp2 = new Date(positive2.timestamp).toLocaleString()
+                    timestamp1.should.be.eql("2/10/2021 21:20:20")
+                    timestamp2.should.be.eql("1/10/2021 12:45:06")
                     done()
                 })
         })
@@ -294,14 +294,14 @@ describe('Positives API', () => {
                     res.should.have.status(200)
                     res.body.should.be.a('array')
                     res.body.length.should.be.eql(3)
-                    let positive2 = res.body[0]
-                    let positive1 = res.body[1]
+                    let positive1 = res.body[0]
+                    let positive2 = res.body[1]
                     let positive3 = res.body[2]
-                    let timestamp1 = new Date(Date.parse(positive1.timestamp)).toLocaleString()
-                    let timestamp2 = new Date(Date.parse(positive2.timestamp)).toLocaleString()
-                    let timestamp3 = new Date(Date.parse(positive3.timestamp)).toLocaleString()
-                    timestamp1.should.be.eql("1/10/2021 12:45:06")
-                    timestamp2.should.be.eql("2/10/2021 21:20:20")
+                    let timestamp1 = new Date(positive1.timestamp).toLocaleString()
+                    let timestamp2 = new Date(positive2.timestamp).toLocaleString()
+                    let timestamp3 = new Date(positive3.timestamp).toLocaleString()
+                    timestamp1.should.be.eql("2/10/2021 21:20:20")
+                    timestamp2.should.be.eql("1/10/2021 12:45:06")
                     timestamp3.should.be.eql("26/9/2021 16:32:10")
                     done()
                 })
@@ -318,7 +318,7 @@ describe('Positives API', () => {
  */
 function getTestPositives() {
     let p1 = {
-        timestamp: "2021-10-01 12:45:06",
+        timestamp: Date.parse("2021-10-01 12:45:06"),
         asymptomatic: true,
         vaccinated: false,
         locations: [{
@@ -370,7 +370,7 @@ function getTestPositives() {
     }
 
     let p2 = {
-        timestamp: "2021-10-02 21:20:20",
+        timestamp: Date.parse("2021-10-02 21:20:20"),
         asymptomatic: false,
         vaccinated: false,
         locations: [{
@@ -422,7 +422,7 @@ function getTestPositives() {
     }
 
     let p3 = {
-        timestamp: "2021-09-26 16:32:10",
+        timestamp: Date.parse("2021-09-26 16:32:10"),
         asymptomatic: false,
         vaccinated: false,
         locations: [{

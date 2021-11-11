@@ -78,7 +78,7 @@ class PositiveRepository {
                 })
                 // Ordenarlos por timestamp
                 positives.sort(function(a, b) {
-                    return a.timestamp - b.timestamp
+                    return b.timestamp - a.timestamp
                 })
                 success(positives)
             })

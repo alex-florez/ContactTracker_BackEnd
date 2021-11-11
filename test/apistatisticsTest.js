@@ -302,7 +302,7 @@ describe('Statistics API', () => {
  */
 function getTestPositives() {
     let p1 = {
-        timestamp: "2021-10-01 12:45:06",
+        timestamp: Date.parse("2021-10-01 12:45:06"),
         asymptomatic: true,
         vaccinated: false,
         locations: [{
@@ -354,7 +354,7 @@ function getTestPositives() {
     }
 
     let p2 = {
-        timestamp: "2021-10-02 21:20:20",
+        timestamp: Date.parse("2021-10-02 21:20:20"),
         asymptomatic: false,
         vaccinated: false,
         locations: [{
@@ -406,7 +406,7 @@ function getTestPositives() {
     }
 
     let p3 = {
-        timestamp: "2021-09-26 16:32:10",
+        timestamp: Date.parse("2021-09-26 16:32:10"),
         asymptomatic: false,
         vaccinated: true,
         locations: [{
@@ -458,7 +458,7 @@ function getTestPositives() {
     }
 
     let p4 = {
-        timestamp: "2021-09-29 20:43:08",
+        timestamp: Date.parse("2021-09-29 20:43:08"),
         asymptomatic: true,
         vaccinated: true,
         locations: [{
